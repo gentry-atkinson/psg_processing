@@ -33,7 +33,7 @@ from sklearn.utils import shuffle
 import pandas as pd
 
 
-EMBEDDING_WIDTH = 96
+EMBEDDING_WIDTH = 64
 SLIDING_WINDIW = 128
 LR = 0.003
 WEIGHT_DECAY = 1e-5
@@ -371,9 +371,10 @@ class NNCLR(nn.Module):
             framework="nnclr",
             model_name='FCN' if backbone=='CNN' else backbone,
             criterion="NTXent",
-            n_class = np.nanmax(y)+1,
+            n_class = int(np.nanmax(y)+1),
         )
-        if self.args.model_name == "DeepConvLSTM" : self.args.model_name = 'DCL'
+        if backbone == "DeepConvLSTM" : 
+            self.args.backbone = 'DCL'
         #Data is channels first
         self.args.len_sw = X.shape[2]
         self.args.n_feature = X.shape[1]
