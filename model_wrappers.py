@@ -17,8 +17,6 @@
 #  Conv_AE      -> Convolutional Autoencoder
 #####################################################################
 
-from multiprocessing import reduction
-from operator import mod
 import os
 from models import backbones, frameworks, attention
 import trainer
@@ -28,10 +26,9 @@ from torch import nn
 from utils.ts_feature_toolkit import get_features_for_set
 from torch.utils.data import DataLoader
 import multiprocessing
-from torchsummary import summary
 from har_util import _logger
 from early_stopping import EarlyStopping
-from cleaner import compute_apparent_clusterability_torch
+#from cleaner import compute_apparent_clusterability_torch
 from sklearn.utils import shuffle
 import pandas as pd
 
@@ -475,7 +472,7 @@ class NNCLR_T(NNCLR):
 
 class NNCLR_R(NNCLR):
     def __init__(self, X, y=None) -> None:
-        super(NNCLR_R, self).__init__(X, y, 'CNN')
+        super(NNCLR_R, self).__init__(X, y, 'DeepConvLSTM')
 
     def get_features(self, X) -> np.ndarray:
         dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args)
@@ -547,7 +544,7 @@ class Supervised_C(nn.Module):
             record = {
                 'Val Loss' : [],
                 'Train Loss' : [],
-                'Clusterability' : []
+                #'Clusterability' : []
             }
         else:
             record = None
@@ -586,8 +583,8 @@ class Supervised_C(nn.Module):
                     y_pred = self.classifier_block(f1)
                     loss = self.criterion(y_pred, y1)
                     val_loss += loss.item()
-                    batch_clusterability = compute_apparent_clusterability_torch(f1, y1)
-                    total_clusterability += batch_clusterability
+                    #batch_clusterability = compute_apparent_clusterability_torch(f1, y1)
+                    #total_clusterability += batch_clusterability
                     num_batches += 1
             val_loss /= self.args.batch_size
             total_clusterability /= num_batches
@@ -595,7 +592,7 @@ class Supervised_C(nn.Module):
             if record_values:
                 record['Val Loss'].append(val_loss)
                 record['Train Loss'].append(total_loss)
-                record['Clusterability'].append(total_clusterability)
+                #record['Clusterability'].append(total_clusterability)
             print('Train loss: ', total_loss)
             print('Validation loss: ', val_loss)
             print('Total clusterability: ', total_clusterability)

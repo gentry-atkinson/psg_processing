@@ -328,14 +328,14 @@ def train(train_loaders, val_loader, model, logger, fitlog, DEVICE, optimizers, 
                     clstr, loss = calculate_model_loss(args, sample, target, model, criterion, DEVICE, recon=recon, nn_replacer=nn_replacer, return_clusterability=True)
                     total_loss += loss.item()
                     total_clstr += clstr
-                # if total_loss <= min_val_loss:
-                #     min_val_loss = total_loss
-                #     best_model = copy.deepcopy(model.state_dict())
-                if total_clstr >= max_clstr and epoch > SKIP_EPOCHS:
-                    max_clstr = total_clstr
+                if total_loss <= min_val_loss:
+                    min_val_loss = total_loss
                     best_model = copy.deepcopy(model.state_dict())
+                # if total_clstr >= max_clstr and epoch > SKIP_EPOCHS:
+                #     max_clstr = total_clstr
+                #     best_model = copy.deepcopy(model.state_dict())
                 logger.debug(f'Val Loss     : {total_loss / n_batches:.4f}')
-                logger.debug(f'Clusterability     : {total_clstr / n_batches:.4f}')
+                #logger.debug(f'Clusterability     : {total_clstr / n_batches:.4f}')
                 fitlog.add_loss(total_loss / n_batches, name="pretrain validation loss", step=epoch)
     return best_model
 
