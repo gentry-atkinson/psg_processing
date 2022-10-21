@@ -1,6 +1,6 @@
 import numpy as np
 from model_wrappers import NNCLR_C
-from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import train_test_split
 import torch
 
 EEG_A1_A2 = 0
@@ -33,12 +33,9 @@ if __name__ == '__main__':
     x_all = np.moveaxis(x_all, 2, 1)
     print('X all shape: ', x_all.shape) #expected 90210
 
-    rs = ShuffleSplit(n_splits=1, test_size=.2, random_state=1899)
-    splits = rs.split(x_all)
+    
 
-    for train_index, test_index in splits:
-        x_all_train = x_all[train_index]
-        x_all_val = x_all[test_index]
+    x_all_train, x_all_val = train_test_split(x_all, test_size=0.2, random_state=1899, shuffle=True)
     feature_learner = NNCLR_C(x_all_train, np.ones((x_all_train.shape[0])))
     feature_learner.fit(
         x_all_train, np.ones(x_all_train.shape[0]),x_all_val, np.ones(x_all_val.shape[0])
