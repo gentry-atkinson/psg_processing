@@ -61,7 +61,7 @@ if __name__ == '__main__':
         f1 = feature_learner.get_features(isolated_channel_val)
         f = np.concatenate((f0, f1), axis=0)
         print("Feature shape: ", f.shape)
-        np.save(f, f'{key}_features_sub_50to100.npy')
+        np.save(f'{key}_features_sub_50to100.npy', f)
 
     #clean up "second 50" samples
     #load "first 50 samples"
@@ -82,15 +82,15 @@ if __name__ == '__main__':
         #write a feature set for part of the first-50 set
         f = feature_learner.get_features(X_train[:,chan_dic[key],:])
         print("Train Feature shape: ", f.shape)
-        np.save(f, f'{key}_train_features_sub_1to50.npy')
+        np.save(f'{key}_train_features_sub_1to50.npy', f)
 
         f = feature_learner.get_features(X_val[:,chan_dic[key],:])
         print("Validation Feature shape: ", f.shape)
-        np.save(f, f'{key}_validation_features_sub_1to50.npy')
+        np.save(f'{key}_validation_features_sub_1to50.npy', f)
 
         f = feature_learner.get_features(X_test[:,chan_dic[key],:])
         print("Test Feature shape: ", f.shape)
-        np.save(f, f'{key}_test_features_sub_1to50.npy')
+        np.save(f'{key}_test_features_sub_1to50.npy', f)
 
     print("Fin")
         
