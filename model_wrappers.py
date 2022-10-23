@@ -33,12 +33,12 @@ from sklearn.utils import shuffle
 import pandas as pd
 
 
-EMBEDDING_WIDTH = 64
-SLIDING_WINDIW = 128
+EMBEDDING_WIDTH = 64 #length of feature vector
+SLIDING_WINDIW = 128 #auto-assigned later, this is just a start value
 LR = 0.003
 WEIGHT_DECAY = 1e-5
 NN_MEM = 1024 #size in megabytes
-CL_EPOCHS = 120
+CL_EPOCHS = 3 #120
 NUM_WORKERS = 16
 BATCH_SIZE = 128
 

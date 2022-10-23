@@ -1,5 +1,5 @@
 import numpy as np
-from model_wrappers import NNCLR_R
+from model_wrappers import NNCLR_C
 from sklearn.model_selection import train_test_split
 import torch
 
@@ -24,10 +24,10 @@ chan_dic = {
 
 
 if __name__ == '__main__':
-    print('Reading arrays...')
-    x_train = np.load('data/x_train.npy')
-    x_val = np.load('data/x_valid.npy')
-    x_test = np.load('data/x_test.npy')
+    print('Reading subjects 50-100...')
+    x_train = np.load('data/second 50/x_train.npy')
+    x_val = np.load('data/second 50/x_valid.npy')
+    x_test = np.load('data/second 50/x_test.npy')
 
     x_all = np.concatenate((x_train, x_val, x_test), axis=0)
     
@@ -49,13 +49,39 @@ if __name__ == '__main__':
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
         
-        feature_learner = NNCLR_R(isolated_channel_train, np.ones((isolated_channel_train.shape[0])))
+        feature_learner = NNCLR_C(isolated_channel_train, np.ones((isolated_channel_train.shape[0])))
         feature_learner.fit(
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
         )
         torch.save(feature_learner, f'{key}_feature_learner_weights.pth')
-        np.save(f'{key}_features_sub_50to100.npy')
+        
+        f0 = feature_learner.get_features(isolated_channel_train)
+        f1 = feature_learner.get_features(isolated_channel_val)
+        f = np.concatenate((f0, f1), axis=0)
+        np.save(f, f'{key}_features_sub_50to100.npy')
+
+    #clean up "second 50" samples
+    #load "first 50 samples"
+
+    print('Reading subjects 50-100...')
+    x_train = np.load('data/first 50/x_train.npy')
+    x_val = np.load('data/first 50/x_valid.npy')
+    x_test = np.load('data/second 50/x_test.npy')
+    
+    for key in chan_dic.keys():
+        continue #skip until real files are loaded
+        #load each per-channel feature learner
+        feature_learner = torch.load(f'{key}_feature_learner_weights.pth')
+        #write a feature set for part of the first-50 set
+        f = feature_learner.get_features(X_train)
+        np.save(f, f'{key}_train_features_sub_1to50.npy')
+
+        f = feature_learner.get_features(X_val)
+        np.save(f, f'{key}_validation_features_sub_1to50.npy')
+
+        f = feature_learner.get_features(X_test)
+        np.save(f, f'{key}_test_features_sub_1to50.npy')
         
 
 
