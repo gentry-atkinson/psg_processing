@@ -44,6 +44,7 @@ if __name__ == '__main__':
 
     x_all_train, x_all_val = train_test_split(x_all, test_size=0.2, random_state=1899, shuffle=True)
     for key in chan_dic.keys():
+        print("Channel: ", key)
         isolated_channel_train = x_all_train[:,chan_dic[key],:]
         isolated_channel_val = x_all_val[:,chan_dic[key],:]
         print('Isolated channel train shape: ', isolated_channel_train.shape)
@@ -54,11 +55,12 @@ if __name__ == '__main__':
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
         )
-        torch.save(feature_learner, f'{key}_feature_learner_weights.pth')
+        torch.save(feature_learner.model.state_dict(), f'{key}_feature_learner_weights.pt')
         
         f0 = feature_learner.get_features(isolated_channel_train)
         f1 = feature_learner.get_features(isolated_channel_val)
         f = np.concatenate((f0, f1), axis=0)
+        print("Feature shape: ", f.shape)
         np.save(f, f'{key}_features_sub_50to100.npy')
 
     #clean up "second 50" samples
@@ -71,17 +73,26 @@ if __name__ == '__main__':
     
     for key in chan_dic.keys():
         continue #skip until real files are loaded
+        print("Channel: ", key)
+        
         #load each per-channel feature learner
-        feature_learner = torch.load(f'{key}_feature_learner_weights.pth')
+        feature_learner = NNCLR_C(X_train[:,chan_dic[key],:], np.ones((isolated_channel_train.shape[0])))
+        feature_learner.model.load_state_dict(torch.load( f'{key}_feature_learner_weights.pt'))
+        torch.load(f'{key}_feature_learner_weights.pth')
         #write a feature set for part of the first-50 set
-        f = feature_learner.get_features(X_train)
+        f = feature_learner.get_features(X_train[:,chan_dic[key],:])
+        print("Train Feature shape: ", f.shape)
         np.save(f, f'{key}_train_features_sub_1to50.npy')
 
-        f = feature_learner.get_features(X_val)
+        f = feature_learner.get_features(X_val[:,chan_dic[key],:])
+        print("Validation Feature shape: ", f.shape)
         np.save(f, f'{key}_validation_features_sub_1to50.npy')
 
-        f = feature_learner.get_features(X_test)
+        f = feature_learner.get_features(X_test[:,chan_dic[key],:])
+        print("Test Feature shape: ", f.shape)
         np.save(f, f'{key}_test_features_sub_1to50.npy')
+
+    print("Fin")
         
 
 
