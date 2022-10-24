@@ -34,7 +34,7 @@ if __name__ == '__main__':
     x_val = np.load('data/second 50/x_valid.npy')
     x_test = np.load('data/second 50/x_test.npy')
 
-    x_all = np.concatenate((x_train, x_val, x_test), axis=0)
+    x_all = np.concatenate((x_train, x_val), axis=0)
     
     print('X train shape: ', x_train.shape)
     print('X val shape: ', x_val.shape)
@@ -43,15 +43,13 @@ if __name__ == '__main__':
     #x_all = x_all[:,:,[ECG, FLOW, THO, ABD]]
     #Swapping to channels first
     x_all = np.moveaxis(x_all, 2, 1)
+    x_test = np.moveaxis(x_test, 2, 1)
     print('X all shape: ', x_all.shape) #expected 90210
 
-    
-
-    x_all_train, x_all_val = train_test_split(x_all, test_size=0.2, random_state=1899, shuffle=True)
     for key in chan_dic.keys():
         print("Channel: ", key)
-        isolated_channel_train = x_all_train[:,chan_dic[key],:]
-        isolated_channel_val = x_all_val[:,chan_dic[key],:]
+        isolated_channel_train = x_all[:,chan_dic[key],:]
+        isolated_channel_val = x_test[:,chan_dic[key],:]
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
         
