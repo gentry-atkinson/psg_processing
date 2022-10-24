@@ -2,6 +2,7 @@ import numpy as np
 from model_wrappers import NNCLR_C
 from sklearn.model_selection import train_test_split
 import torch
+import os
 
 EEG_A1_A2 = 0
 EEG_C3_A2 = 1
@@ -24,6 +25,10 @@ chan_dic = {
 
 
 if __name__ == '__main__':
+    if not os.path.exists('temp'):
+        os.mkdir('temp')
+    if not os.path.exists('results'):
+        os.mkdir('results')
     print('Reading subjects 50-100...')
     x_train = np.load('data/second 50/x_train.npy')
     x_val = np.load('data/second 50/x_valid.npy')
@@ -66,29 +71,29 @@ if __name__ == '__main__':
     #clean up "second 50" samples
     #load "first 50 samples"
 
-    print('Reading subjects 50-100...')
+    print('Reading subjects 0-49...')
     x_train = np.load('data/first 50/x_train.npy')
     x_val = np.load('data/first 50/x_valid.npy')
     x_test = np.load('data/second 50/x_test.npy')
     
     for key in chan_dic.keys():
-        continue #skip until real files are loaded
+        #continue #skip until real files are loaded
         print("Channel: ", key)
         
         #load each per-channel feature learner
-        feature_learner = NNCLR_C(X_train[:,chan_dic[key],:], np.ones((isolated_channel_train.shape[0])))
+        feature_learner = NNCLR_C(x_train[:,chan_dic[key],:], np.ones((isolated_channel_train.shape[0])))
         feature_learner.model.load_state_dict(torch.load( f'{key}_feature_learner_weights.pt'))
         torch.load(f'{key}_feature_learner_weights.pth')
         #write a feature set for part of the first-50 set
-        f = feature_learner.get_features(X_train[:,chan_dic[key],:])
+        f = feature_learner.get_features(x_train[:,chan_dic[key],:])
         print("Train Feature shape: ", f.shape)
         np.save(f'{key}_train_features_sub_1to50.npy', f)
 
-        f = feature_learner.get_features(X_val[:,chan_dic[key],:])
+        f = feature_learner.get_features(x_val[:,chan_dic[key],:])
         print("Validation Feature shape: ", f.shape)
         np.save(f'{key}_validation_features_sub_1to50.npy', f)
 
-        f = feature_learner.get_features(X_test[:,chan_dic[key],:])
+        f = feature_learner.get_features(x_test[:,chan_dic[key],:])
         print("Test Feature shape: ", f.shape)
         np.save(f'{key}_test_features_sub_1to50.npy', f)
 
