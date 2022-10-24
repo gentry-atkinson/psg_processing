@@ -74,7 +74,7 @@ if __name__ == '__main__':
     x_test = np.load('data/second 50/x_test.npy')
     
     for key in chan_dic.keys():
-        #continue #skip until real files are loaded
+        continue #skip until real files are loaded
         print("Channel: ", key)
         
         #load each per-channel feature learner
