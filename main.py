@@ -1,6 +1,5 @@
 import numpy as np
 from model_wrappers import NNCLR_C
-from sklearn.model_selection import train_test_split
 import torch
 import os
 
