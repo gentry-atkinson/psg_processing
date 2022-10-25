@@ -80,6 +80,9 @@ if __name__ == '__main__':
         print("Feature shape: ", f.shape)
         np.save(f'{key}_features_sub_50to100.npy', f)
 
+        
+
+>>>>>>> d313befad7952aaca108d7a4b65db5a00b004626
         #write a feature set for part of the first-50 set
         f = feature_learner.get_features(x_train_first[:,chan_dic[key],:])
         print("Train Feature shape: ", f.shape)
