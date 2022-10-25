@@ -37,13 +37,13 @@ if __name__ == '__main__':
     x_test_second = np.load('data/second 50/x_test.npy', allow_pickle=True)
 
     x_all = np.concatenate((x_train_second, x_val_second), axis=0)
-    del x_train_second
-    del x_val_second
-    gc.collect()
 
     print('Second X train shape: ', x_train_second.shape)
     print('Second X val shape: ', x_val_second.shape)
     print('Second X test shape: ', x_test_second.shape)
+    del x_train_second
+    del x_val_second
+    gc.collect()
 
     #x_all = x_all[:,:,[ECG, FLOW, THO, ABD]]
     #Swapping to channels first
@@ -80,9 +80,6 @@ if __name__ == '__main__':
         print("Feature shape: ", f.shape)
         np.save(f'{key}_features_sub_50to100.npy', f)
 
-        
-
->>>>>>> d313befad7952aaca108d7a4b65db5a00b004626
         #write a feature set for part of the first-50 set
         f = feature_learner.get_features(x_train_first[:,chan_dic[key],:])
         print("Train Feature shape: ", f.shape)
