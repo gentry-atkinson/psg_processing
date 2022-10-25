@@ -38,9 +38,9 @@ SLIDING_WINDIW = 128 #auto-assigned later, this is just a start value
 LR = 0.003
 WEIGHT_DECAY = 1e-5
 NN_MEM = 1024 #size in megabytes
-CL_EPOCHS = 3 #120
+CL_EPOCHS = 2#120
 NUM_WORKERS = 16
-BATCH_SIZE = 128
+BATCH_SIZE = 32
 
 LOG = _logger('temp/train_log.txt')
 
