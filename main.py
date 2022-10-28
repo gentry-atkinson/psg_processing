@@ -1,5 +1,5 @@
 import numpy as np
-from model_wrappers import NNCLR_C
+from model_wrappers import NNCLR_R
 from models.backbones import FCN
 import torch
 from torch import nn
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
         
-        feature_learner = NNCLR_C(isolated_channel_train, np.ones((isolated_channel_train.shape[0])))
+        feature_learner = NNCLR_R(isolated_channel_train, np.ones((isolated_channel_train.shape[0])))
         feature_learner.fit(
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
