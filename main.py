@@ -1,6 +1,5 @@
 import numpy as np
 from model_wrappers import NNCLR_R
-from models.backbones import FCN
 import torch
 from torch import nn
 import os
@@ -24,6 +23,8 @@ chan_dic = {
     'Respiratory Belt' : [10, 11],
     'ECG' : [8]
 }
+
+features = 'LSTM'
 
 
 if __name__ == '__main__':
@@ -72,26 +73,26 @@ if __name__ == '__main__':
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
         )
-        torch.save(feature_learner.model.state_dict(), f'{key}_feature_learner_weights.pt')
+        torch.save(feature_learner.model.state_dict(), f'{key}_{features}_feature_learner_weights.pt')
         
         f0 = feature_learner.get_features(isolated_channel_train)
         f1 = feature_learner.get_features(isolated_channel_val)
         f = np.concatenate((f0, f1), axis=0)
         print("Feature shape: ", f.shape)
-        np.save(f'{key}_features_sub_50to100.npy', f)
+        np.save(f'{key}_{features}_features_sub_50to100.npy', f)
 
         #write a feature set for part of the first-50 set
         f = feature_learner.get_features(x_train_first[:,chan_dic[key],:])
         print("Train Feature shape: ", f.shape)
-        np.save(f'{key}_train_features_sub_1to50.npy', f)
+        np.save(f'{key}_{features}_train_features_sub_1to50.npy', f)
 
         f = feature_learner.get_features(x_val_first[:,chan_dic[key],:])
         print("Validation Feature shape: ", f.shape)
-        np.save(f'{key}_validation_features_sub_1to50.npy', f)
+        np.save(f'{key}_{features}_validation_features_sub_1to50.npy', f)
 
         f = feature_learner.get_features(x_test_first[:,chan_dic[key],:])
         print("Test Feature shape: ", f.shape)
-        np.save(f'{key}_test_features_sub_1to50.npy', f)
+        np.save(f'{key}_{features}_test_features_sub_1to50.npy', f)
 
     print("Fin")
         
