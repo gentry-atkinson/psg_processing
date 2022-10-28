@@ -54,7 +54,7 @@ if __name__ == '__main__':
     print('Reading subjects 0-49...')
     x_train_first = np.load('data/first 50/x_train.npy', allow_pickle=True)
     x_val_first = np.load('data/first 50/x_valid.npy', allow_pickle=True)
-    x_test_first = np.load('data/second 50/x_test.npy', allow_pickle=True)
+    x_test_first = np.load('data/first 50/x_test.npy', allow_pickle=True)
 
     X_train_first = np.moveaxis(x_train_first, 2, 1)
     X_val_first = np.moveaxis(x_val_first, 2, 1)
