@@ -11,9 +11,9 @@ channels = [
 
 if __name__ == '__main__':
     for channel in channels:
-        x_train = np.load(f'{channel}_train_features_sub_1to50.npy')
-        x_val = np.load(f'{channel}_validation_features_sub_1to50.npy')
-        x_test = np.load(f'{channel}_test_features_sub_1to50.npy')
+        x_train = np.load(f'{channel}_CNN_train_features_sub_1to50.npy')
+        x_val = np.load(f'{channel}_CNN_validation_features_sub_1to50.npy')
+        x_test = np.load(f'{channel}_CNN_test_features_sub_1to50.npy')
         y_train = np.load('data/first 50/y_train.npy')
         y_train = np.argmax(y_train, axis=-1)
         y_val = np.load('data/first 50/y_valid.npy')

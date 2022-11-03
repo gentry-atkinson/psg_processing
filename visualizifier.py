@@ -10,7 +10,7 @@ channels = [
 ]
 
 paths = [
-    '_train_features_sub_1to50.npy', '_validation_features_sub_1to50.npy', '_test_features_sub_1to50.npy'
+    '_CNN_train_features_sub_1to50.npy', '_validation_features_sub_1to50.npy', '_test_features_sub_1to50.npy'
 ]
 
 if __name__ == '__main__':
