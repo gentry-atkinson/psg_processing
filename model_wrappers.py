@@ -33,7 +33,7 @@ from sklearn.utils import shuffle
 import pandas as pd
 
 
-EMBEDDING_WIDTH = 64 #length of feature vector
+EMBEDDING_WIDTH = 32 #length of feature vector
 SLIDING_WINDIW = 128 #auto-assigned later, this is just a start value
 LR = 0.003
 WEIGHT_DECAY = 1e-5

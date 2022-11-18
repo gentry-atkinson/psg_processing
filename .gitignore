@@ -1,0 +1,9 @@
+*.pt
+*.npy
+*.png
+*.zip
+*.pyc
+
+temp/*
+
+README.txt
