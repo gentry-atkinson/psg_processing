@@ -1,7 +1,6 @@
 import numpy as np
 from model_wrappers import NNCLR_C
 import torch
-from torch import nn
 import os
 import gc
 
@@ -51,6 +50,7 @@ if __name__ == '__main__':
     x_all = np.moveaxis(x_all, 2, 1)
     x_test_second = np.moveaxis(x_test_second, 2, 1)
     print('X all shape: ', x_all.shape) #expected 90210
+    print('Second X test shape after move: ', x_test_second.shape)
 
     print('Reading subjects 0-49...')
     x_train_first = np.load('data/first 50/x_train.npy', allow_pickle=True)
@@ -61,6 +61,10 @@ if __name__ == '__main__':
     X_val_first = np.moveaxis(x_val_first, 2, 1)
     X_test_first = np.moveaxis(x_test_first, 2, 1)
 
+    print('First X train shape: ', X_train_first.shape)
+    print('First X val shape: ', X_val_first.shape)
+    print('First X test shape: ', X_test_first.shape)
+
     for key in chan_dic.keys():
         print("Channel: ", key)
         isolated_channel_train = x_all[:,chan_dic[key],:]
@@ -68,7 +72,7 @@ if __name__ == '__main__':
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
         
-        feature_learner = NNCLR_C(isolated_channel_train, np.ones((isolated_channel_train.shape[0])))
+        feature_learner = NNCLR_C(X=isolated_channel_train, y=None)
         feature_learner.fit(
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
