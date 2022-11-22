@@ -5,9 +5,9 @@ import umap.umap_ as umap
 from matplotlib import pyplot as plt
 
 def load_synthetic_dataset(incl_xyz_accel=True, incl_rms_accel=False, incl_val_group=True):
-    NUM_TRAIN = 1001
-    NUM_VAL = 101
-    NUM_TEST = 101
+    NUM_TRAIN = 2001
+    NUM_VAL = 201
+    NUM_TEST = 201
     NUM_CLASSES = 2
     INSTANCE_LEN = 150
 
@@ -99,7 +99,20 @@ def load_synthetic_dataset(incl_xyz_accel=True, incl_rms_accel=False, incl_val_g
     return train_set, train_labels, val_set, val_labels, test_set, test_labels
 
 if __name__ == '__main__':
-    X_second_train, _,  X_second_val, _,  X_second_test, _ = load_synthetic_dataset()
+    X_full_train, y_full_train,  X_full_val, y_full_val,  X_full_test, y_full_test = load_synthetic_dataset()
+
+    X_first_train = X_full_train[0:len(X_full_train)//2]
+    X_first_val = X_full_train[0:len(X_full_val)//2]
+    X_first_test = X_full_train[0:len(X_full_test)//2]
+
+    y_train = X_full_train[0:len(y_full_train)//2]
+    y_val = X_full_train[0:len(y_full_val)//2]
+    y_test = X_full_train[0:len(y_full_test)//2]
+
+    X_second_train = X_full_train[len(X_full_train)//2:]
+    X_second_val = X_full_train[len(X_full_val)//2:]
+    X_second_test = X_full_train[len(X_full_test)//2:]
+
     X_all = np.concatenate((X_second_train, X_second_val), axis=0)
 
     X_all = np.moveaxis(X_all, 2, 1)
@@ -109,8 +122,6 @@ if __name__ == '__main__':
     print(f'X_second_val {X_second_val.shape}')
     print(f'X_second_test: {X_second_test.shape}')
     print(f'X_all: {X_all.shape}')
-
-    X_first_train, y_train, X_first_val, y_val,  X_first_test, y_test = load_synthetic_dataset()
 
     X_first_train = np.moveaxis(X_first_train, 2, 1)
     X_first_val = np.moveaxis(X_first_val, 2, 1)
@@ -146,11 +157,11 @@ if __name__ == '__main__':
 
     embedding = reducer.fit_transform(f_val)
     ax[1].set_title('Val')
-    ax[1].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=y_train)
+    ax[1].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=y_val)
 
     embedding = reducer.fit_transform(f_test)
     ax[2].set_title('Test')
-    ax[2].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=y_train)
+    ax[2].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=y_test)
 
 
     plt.savefig('synthetic_data_train_val_test.png')
