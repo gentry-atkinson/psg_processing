@@ -3,6 +3,7 @@ from model_wrappers import NNCLR_C
 import torch
 import os
 import gc
+from utils.gen_ts_data import generate_pattern_data_as_array
 
 EEG_A1_A2 = 0
 EEG_C3_A2 = 1
@@ -24,6 +25,8 @@ chan_dic = {
 }
 
 features = 'CNN'
+
+NUM_CLASS = 2
 
 
 if __name__ == '__main__':
@@ -72,7 +75,7 @@ if __name__ == '__main__':
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
         
-        feature_learner = NNCLR_C(X=isolated_channel_train, y=None)
+        feature_learner = NNCLR_C(X=isolated_channel_train, y=[NUM_CLASS-1])
         feature_learner.fit(
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
