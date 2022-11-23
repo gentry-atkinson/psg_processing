@@ -102,16 +102,16 @@ if __name__ == '__main__':
     X_full_train, y_full_train,  X_full_val, y_full_val,  X_full_test, y_full_test = load_synthetic_dataset()
 
     X_first_train = X_full_train[0:len(X_full_train)//2]
-    X_first_val = X_full_train[0:len(X_full_val)//2]
-    X_first_test = X_full_train[0:len(X_full_test)//2]
+    X_first_val = X_full_val[0:len(X_full_val)//2]
+    X_first_test = X_full_test[0:len(X_full_test)//2]
 
-    y_train = X_full_train[0:len(y_full_train)//2]
-    y_val = X_full_train[0:len(y_full_val)//2]
-    y_test = X_full_train[0:len(y_full_test)//2]
+    y_train = y_full_train[0:len(y_full_train)//2]
+    y_val = y_full_val[0:len(y_full_val)//2]
+    y_test = y_full_test[0:len(y_full_test)//2]
 
     X_second_train = X_full_train[len(X_full_train)//2:]
-    X_second_val = X_full_train[len(X_full_val)//2:]
-    X_second_test = X_full_train[len(X_full_test)//2:]
+    X_second_val = X_full_val[len(X_full_val)//2:]
+    X_second_test = X_full_test[len(X_full_test)//2:]
 
     X_all = np.concatenate((X_second_train, X_second_val), axis=0)
 
@@ -130,6 +130,14 @@ if __name__ == '__main__':
     print(f'X_first_train: {X_first_train.shape}')
     print(f'X_first_val {X_first_val.shape}')
     print(f'X_first_test: {X_first_test.shape}')
+
+    y_train = np.argmax(y_train, axis=-1)
+    y_val = np.argmax(y_val, axis=-1)
+    y_test = np.argmax(y_test, axis=-1)
+
+    print(f'y_train: {y_train.shape}')
+    print(f'y_val {y_val.shape}')
+    print(f'y_test: {y_test.shape}')
 
     feature_learner = NNCLR_C(X=X_all, y=[1])
     feature_learner.fit(
