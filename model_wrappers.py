@@ -17,6 +17,8 @@
 #  Conv_AE      -> Convolutional Autoencoder
 #####################################################################
 
+#Fit shuffling is off
+
 import os
 from models import backbones, frameworks, attention
 import trainer
@@ -397,9 +399,9 @@ class NNCLR(nn.Module):
         """
         X_train, y_train = shuffle(X_train, y_train, random_state=1899)
         X_val, y_val = shuffle(X_val, y_val, random_state=1899)
-        train_dataloader = setup_dataloader(X_train, y_train, self.args, shuffle=True)
+        train_dataloader = setup_dataloader(X_train, y_train, self.args, shuffle=False)
 
-        val_dataloader = setup_dataloader(X_val, y_val, self.args, shuffle=True)
+        val_dataloader = setup_dataloader(X_val, y_val, self.args, shuffle=False)
 
         best_model = trainer.train(
             train_loaders=[train_dataloader],
