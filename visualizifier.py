@@ -10,8 +10,10 @@ channels = [
 ]
 
 paths = [
-    '_CNN_train_features_sub_1to50.npy', '_validation_features_sub_1to50.npy', '_test_features_sub_1to50.npy'
+    '_CNN_train_features_sub_1to50.npy', '_CNN_validation_features_sub_1to50.npy', '_CNN_test_features_sub_1to50.npy'
 ]
+
+features = 'CNN'
 
 if __name__ == '__main__':
     if umap_dim == 3:
@@ -23,7 +25,7 @@ if __name__ == '__main__':
    
     for i, channel in enumerate(channels):
         print('Loading ', channel)
-        f = np.load(f'{channel}_features_sub_50to100.npy', allow_pickle=True)
+        f = np.load(f'{channel}_{features}_features_sub_50to100.npy', allow_pickle=True)
 
         print('Feature shape: ', f.shape)
 
