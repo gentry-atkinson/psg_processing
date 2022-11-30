@@ -21,8 +21,12 @@ ABD = 11
 chan_dic = {
     'Thermistor': [9],
     'Respiratory Belt' : [10, 11],
-    'ECG' : [8]
-}
+    'ECG' : [8],
+    'EOG' : [3, 4],
+    'EMG' : [5],
+    'Leg' : [6, 7],
+    'Flow' : [9]
+} 
 
 features = 'CNN'
 
