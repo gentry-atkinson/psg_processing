@@ -24,8 +24,7 @@ chan_dic = {
     'ECG' : [8],
     'EOG' : [3, 4],
     'EMG' : [5],
-    'Leg' : [6, 7],
-    'Flow' : [9]
+    'Leg' : [6, 7]
 } 
 
 features = 'CNN'
