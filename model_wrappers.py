@@ -428,7 +428,7 @@ class NNCLR_C(NNCLR):
         super(NNCLR_C, self).__init__(X, y, 'CNN')
 
     def get_features(self, X) -> np.ndarray:
-        dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args)
+        dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args, shuffle=False)
         fet = None
         with torch.no_grad():
             for x, y, d in dataloader:
@@ -453,7 +453,7 @@ class NNCLR_T(NNCLR):
         super(NNCLR_T, self).__init__(X, y, 'Transformer')
 
     def get_features(self, X) -> np.ndarray:
-        dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args)
+        dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args, shuffle=False)
         fet = None
         with torch.no_grad():
             for x, y, d in dataloader:
@@ -478,7 +478,7 @@ class NNCLR_R(NNCLR):
         super(NNCLR_R, self).__init__(X, y, 'DeepConvLSTM')
 
     def get_features(self, X) -> np.ndarray:
-        dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args)
+        dataloader = setup_dataloader(X, np.zeros(X.shape[0]), self.args, shuffle=False)
         fet = None
         with torch.no_grad():
             for x, y, d in dataloader:
