@@ -10,7 +10,7 @@ channels = [
 ]
 
 paths = [
-    '_CNN_train_features_sub_1to50.npy', '_CNN_validation_features_sub_1to50.npy', '_CNN_test_features_sub_1to50.npy'
+    '_Supervised CNN_train_features_sub_1to50.npy', '_Supervised CNN_validation_features_sub_1to50.npy', '_Supervised CNN_test_features_sub_1to50.npy'
 ]
 
 features = 'CNN'
