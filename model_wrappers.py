@@ -590,8 +590,9 @@ class Supervised_C(nn.Module):
                     #total_clusterability += batch_clusterability
                     num_batches += 1
             val_loss /= self.args.batch_size
-            total_clusterability /= num_batches
-            es(total_clusterability)
+            #total_clusterability /= num_batches
+            #es(total_clusterability)
+            es(val_loss)
             if record_values:
                 record['Val Loss'].append(val_loss)
                 record['Train Loss'].append(total_loss)
@@ -604,7 +605,7 @@ class Supervised_C(nn.Module):
                 break
         if record_values:
             df = pd.DataFrame.from_dict(record)
-            df.to_csv('results/train_values.csv', index=True)
+            df.to_csv('supervised_cnn_train_values.csv', index=True)
 
 
 
