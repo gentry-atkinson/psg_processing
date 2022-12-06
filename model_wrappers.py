@@ -573,7 +573,7 @@ class Supervised_C(nn.Module):
                 
                 loss.backward()
                 self.optimizer.step()
-                if i%4 == 0: print('.', end='')
+                if i%100 == 0: print('.', end='')
             total_loss /= self.args.batch_size
             print('\n')
             with torch.no_grad():

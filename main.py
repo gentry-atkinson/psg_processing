@@ -46,6 +46,10 @@ if __name__ == '__main__':
     y_val_second = np.load('data/second 50/y_valid.npy', allow_pickle=True)
     y_test_second = np.load('data/second 50/y_test.npy', allow_pickle=True)
 
+    y_train_second = np.argmax(y_train_second, axis=-1)
+    y_val_second =  np.argmax(y_val_second, axis=-1)
+    y_test_second =  np.argmax(y_test_second, axis=-1)
+
     x_all = np.concatenate((x_train_second, x_val_second), axis=0)
     y_all = np.concatenate((y_train_second, y_val_second), axis=0)
 
