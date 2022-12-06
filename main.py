@@ -1,9 +1,8 @@
 import numpy as np
-from model_wrappers import Supervised_C
+from model_wrappers import NNCLR_C
 import torch
 import os
 import gc
-from utils.gen_ts_data import generate_pattern_data_as_array
 
 EEG_A1_A2 = 0
 EEG_C3_A2 = 1
@@ -19,7 +18,7 @@ THO = 10
 ABD = 11
 
 chan_dic = {
-    'Thermistor': [9],
+    'Thermistor Flow': [9],
     'Respiratory Belt' : [10, 11],
     'ECG' : [8],
     'EOG' : [3, 4],
@@ -27,9 +26,12 @@ chan_dic = {
     'Leg' : [6, 7]
 } 
 
-features = 'Supervised CNN'
+features = 'CNN'
 
 NUM_CLASS = 2
+
+UNLABELED_DIR = 'second 50'
+LABELED_DIR = 'first 50'
 
 
 if __name__ == '__main__':
@@ -38,9 +40,9 @@ if __name__ == '__main__':
     if not os.path.exists('results'):
         os.mkdir('results')
     print('Reading subjects 50-100...')
-    x_train_second = np.load('data/second 50/x_train.npy', allow_pickle=True)
-    x_val_second = np.load('data/second 50/x_valid.npy', allow_pickle=True)
-    x_test_second = np.load('data/second 50/x_test.npy', allow_pickle=True)
+    x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
+    x_val_second = np.load(f'data/{UNLABELED_DIR}/x_valid.npy', allow_pickle=True)
+    x_test_second = np.load(f'data/{UNLABELED_DIR}/x_test.npy', allow_pickle=True)
 
     y_train_second = np.load('data/second 50/y_train.npy', allow_pickle=True)
     y_val_second = np.load('data/second 50/y_valid.npy', allow_pickle=True)
@@ -60,22 +62,21 @@ if __name__ == '__main__':
     del x_val_second
     gc.collect()
 
-    #x_all = x_all[:,:,[ECG, FLOW, THO, ABD]]
     #Swapping to channels first
     x_all = np.moveaxis(x_all, 2, 1)
 
     x_test_second = np.moveaxis(x_test_second, 2, 1)
     # x_val_second = np.moveaxis(x_val_second, 2, 1)
     # x_train_second = np.moveaxis(x_train_second, 2, 1)
-    print('X all shape: ', x_all.shape) #expected 90210
+    print('X all shape: ', x_all.shape)
     print('Second X test shape after move: ', x_test_second.shape)
     # print('Second X val shape after move: ', x_val_second.shape)
     # print('Second X train shape after move: ', x_train_second.shape)
 
     print('Reading subjects 0-49...')
-    x_train_first = np.load('data/first 50/x_train.npy', allow_pickle=True)
-    x_val_first = np.load('data/first 50/x_valid.npy', allow_pickle=True)
-    x_test_first = np.load('data/first 50/x_test.npy', allow_pickle=True)
+    x_train_first = np.load(f'data/{LABELED_DIR}/x_train.npy', allow_pickle=True)
+    x_val_first = np.load(f'data/{LABELED_DIR}/x_valid.npy', allow_pickle=True)
+    x_test_first = np.load(f'data/{LABELED_DIR}/x_test.npy', allow_pickle=True)
 
     X_train_first = np.moveaxis(x_train_first, 2, 1)
     X_val_first = np.moveaxis(x_val_first, 2, 1)
@@ -94,15 +95,17 @@ if __name__ == '__main__':
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
         
         
-        feature_learner = Supervised_C(X=isolated_channel_train, y=y_train_second)
-        # feature_learner.fit(
-        #     isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
-        #     isolated_channel_val, np.ones(isolated_channel_val.shape[0])
-        # )
+        #feature_learner = NNCLR_C(X=isolated_channel_train, y=y_train_second)
+        #The y values are used to determine the number of classes
+        feature_learner = NNCLR_C(X=isolated_channel_train, y=[1])
         feature_learner.fit(
-            isolated_channel_train, y_all,
-            isolated_channel_val, y_test_second
+            isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
+            isolated_channel_val, np.ones(isolated_channel_val.shape[0])
         )
+        # feature_learner.fit(
+        #     isolated_channel_train, y_all,
+        #     isolated_channel_val, y_test_second
+        # )
 
         torch.save(feature_learner.model.state_dict(), f'{key}_{features}_feature_learner_weights.pt')
         
