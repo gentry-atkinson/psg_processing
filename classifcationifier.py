@@ -11,12 +11,10 @@ from sklearn.model_selection import train_test_split
 # ]
 
 channels = [
-    'X',
-    'Y',
-    'Z',
-    'X, Y, Z together',
-    'RMS'
+    'Accel','BVP','EDA', 'P Temp', 'All together'
 ]
+
+LABELED_DIR = 'twristar/labeled'
 
 if __name__ == '__main__':
     for channel in channels:
@@ -25,12 +23,16 @@ if __name__ == '__main__':
         x_test = np.load(f'{channel}_Twristar_CNN_test_features_sub_1to50.npy')
 
         #y_train = np.load('data/first 50/y_train.npy')
-        y_train = np.load('data/twristar/labeled/y_train.npy')
+        y_train = np.load(f'data/{LABELED_DIR}/y_train.npy')
+        y_val = np.load(f'data/{LABELED_DIR}/y_valid.npy')
+        y_test = np.load(f'data/{LABELED_DIR}/y_test.npy')
 
-        #y_val = np.load('data/first 50/y_valid.npy')
-        y_train, y_test = train_test_split(y_train, test_size=0.1)
-        #y_test = np.load('data/first 50/y_test.npy')
-        y_train, y_val = train_test_split(y_train, test_size=0.1)
+        if y_train.ndim>1:
+            y_train = np.argmax(y_train, axis=-1)
+        if y_val.ndim>1:
+            y_val = np.argmax(y_val, axis=-1)
+        if y_test.ndim>1:
+            y_test = np.argmax(y_test, axis=-1)
 
         print('X train shape: ', x_train.shape)
         print('X val shape: ', x_val.shape)

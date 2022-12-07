@@ -1,0 +1,3 @@
+[submodule "data/twristar/load_data_time_series_dev"]
+	path = data/twristar/load_data_time_series_dev
+	url = https://git.txstate.edu/imics-lab/load_data_time_series_dev.git

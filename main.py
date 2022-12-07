@@ -27,15 +27,19 @@ ABD = 11
 #     'Leg' : [6, 7]
 # } 
 
+# chan_dic = {
+#     'Accel' : [0],
+#     'BVP' : [1],
+#     'EDA' : [2],
+#     'P Temp' : [3],
+#     'All together' : [0, 1, 2, 3]
+# }
+
 chan_dic = {
-    'X' : [0],
-    'Y' : [1],
-    'Z' : [2],
-    'X, Y, Z together' : [0, 1, 2],
-    'RMS' : [3]
+    'test' : [0]
 }
 
-features = 'Twristar_CNN'
+features = 'dummy_CNN'
 
 NUM_CLASS = 2
 
@@ -52,32 +56,17 @@ if __name__ == '__main__':
         os.mkdir('results')
 
     print('Reading (unlabeled) subjects 50-100...')
-    x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
-
-    if os.path.exists(f'data/{UNLABELED_DIR}/x_valid.npy'):
-        x_test_second = np.load(f'data/{UNLABELED_DIR}/x_test.npy', allow_pickle=True)
-    else:
-        x_train_second, x_test_second = train_test_split( x_train_second, test_size=0.1, shuffle=False)
-
-    if os.path.exists(f'data/{UNLABELED_DIR}/x_valid.npy'):
-        x_val_second = np.load(f'data/{UNLABELED_DIR}/x_valid.npy', allow_pickle=True)
-    else:
-        x_train_second, x_val_second = train_test_split( x_train_second, test_size=0.1, shuffle=False)
+    # x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
+    # x_test_second = np.load(f'data/{UNLABELED_DIR}/x_test.npy', allow_pickle=True)
+    # x_val_second = np.load(f'data/{UNLABELED_DIR}/x_valid.npy', allow_pickle=True)
+    x_train_second = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    x_test_second = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    x_val_second = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    
 
     # y_train_second = np.load('data/second 50/y_train.npy', allow_pickle=True)
     # y_val_second = np.load('data/second 50/y_valid.npy', allow_pickle=True)
     # y_test_second = np.load('data/second 50/y_test.npy', allow_pickle=True)
-
-    # y_train_second = np.load(f'data/{UNLABELED_DIR}/y_train.npy', allow_pickle=True)
-    # if os.path.exists(f'data/{UNLABELED_DIR}/x_valid.npy'):
-    #     y_test_second = np.load(f'data/{UNLABELED_DIR}/y_test.npy', allow_pickle=True)
-    # else:
-    #     y_train_second, y_test_second = train_test_split( y_train_second, test_size=0.1)
-
-    # if os.path.exists(f'data/{UNLABELED_DIR}/y_valid.npy'):
-    #     y_val_second = np.load(f'data/{UNLABELED_DIR}/y_valid.npy', allow_pickle=True)
-    # else:
-    #     y_train_second, y_val_second = train_test_split( y_train_second, test_size=0.1)
 
     # y_train_second = np.argmax(y_train_second, axis=-1)
     # y_val_second =  np.argmax(y_val_second, axis=-1)
@@ -105,12 +94,13 @@ if __name__ == '__main__':
     # print('Second X train shape after move: ', x_train_second.shape)
 
     print('Reading (labeled) subjects 0-49...')
-    x_train_first = np.load(f'data/{LABELED_DIR}/x_train.npy', allow_pickle=True)
-    x_test_first = np.load(f'data/{LABELED_DIR}/x_test.npy', allow_pickle=True)
-    if os.path.exists(f'data/{LABELED_DIR}/x_valid.npy'):
-        x_val_first = np.load(f'data/{LABELED_DIR}/x_valid.npy', allow_pickle=True)
-    else:
-        x_train_first, x_val_first = train_test_split(x_train_first, test_size=0.1, shuffle=False)
+    # x_train_first = np.load(f'data/{LABELED_DIR}/x_train.npy', allow_pickle=True)
+    # x_test_first = np.load(f'data/{LABELED_DIR}/x_test.npy', allow_pickle=True)
+    # x_val_first = np.load(f'data/{LABELED_DIR}/x_valid.npy', allow_pickle=True)
+    x_train_first = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    x_test_first = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    x_val_first = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+
 
     X_train_first = np.moveaxis(x_train_first, 2, 1)
     X_val_first = np.moveaxis(x_val_first, 2, 1)
