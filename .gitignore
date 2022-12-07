@@ -3,6 +3,7 @@
 *.png
 *.zip
 *.pyc
+*.pdf
 
 temp/*
 

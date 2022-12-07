@@ -58,13 +58,6 @@ if __name__ == '__main__':
             else:
                 print('I don\'t understand Python')
 
-            #The test array labels are the wrong shape?
-            y = np.argmax(y, axis=-1)
-            if y.shape[0] < f.shape[0]:
-                y = np.concatenate((y, np.zeros(( f.shape[0] - y.shape[0]))))
-            elif y.shape[0] > f.shape[0]:
-                y = y[:f.shape[0]]
-
             print('Feature shape: ', f.shape)
             print('Label shape: ', y.shape)
 
