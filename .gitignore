@@ -4,6 +4,8 @@
 *.zip
 *.pyc
 *.pdf
+*.csv
+*.xlsx
 
 temp/*
 
