@@ -59,9 +59,9 @@ if __name__ == '__main__':
     # x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
     # x_test_second = np.load(f'data/{UNLABELED_DIR}/x_test.npy', allow_pickle=True)
     # x_val_second = np.load(f'data/{UNLABELED_DIR}/x_valid.npy', allow_pickle=True)
-    x_train_second = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
-    x_test_second = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
-    x_val_second = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    x_train_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    x_test_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    x_val_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
     
 
     # y_train_second = np.load('data/second 50/y_train.npy', allow_pickle=True)
@@ -97,9 +97,9 @@ if __name__ == '__main__':
     # x_train_first = np.load(f'data/{LABELED_DIR}/x_train.npy', allow_pickle=True)
     # x_test_first = np.load(f'data/{LABELED_DIR}/x_test.npy', allow_pickle=True)
     # x_val_first = np.load(f'data/{LABELED_DIR}/x_valid.npy', allow_pickle=True)
-    x_train_first = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
-    x_test_first = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
-    x_val_first = np.concatenate((np.zeros(500, 150, 1), np.ones(300, 150, 1)), axis=0)
+    x_train_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    x_test_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    x_val_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
 
 
     X_train_first = np.moveaxis(x_train_first, 2, 1)
