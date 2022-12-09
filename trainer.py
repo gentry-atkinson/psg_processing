@@ -29,7 +29,7 @@ nn_replacer = None
 
 # create directory for saving models and plots
 global model_dir_name
-model_dir_name = 'results'
+model_dir_name = 'model_snapshots'
 if not os.path.exists(model_dir_name):
     os.makedirs(model_dir_name)
 global plot_dir_name
