@@ -39,7 +39,7 @@ chan_dic = {
     'test' : [0]
 }
 
-features = 'dummy_CNN'
+features = 'train_on_all_CNN'
 
 NUM_CLASS = 2
 
@@ -56,12 +56,12 @@ if __name__ == '__main__':
         os.mkdir('results')
 
     print('Reading (unlabeled) subjects 50-100...')
-    # x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
-    # x_test_second = np.load(f'data/{UNLABELED_DIR}/x_test.npy', allow_pickle=True)
-    # x_val_second = np.load(f'data/{UNLABELED_DIR}/x_valid.npy', allow_pickle=True)
-    x_train_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
-    x_test_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
-    x_val_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
+    x_test_second = np.load(f'data/{UNLABELED_DIR}/x_test.npy', allow_pickle=True)
+    x_val_second = np.load(f'data/{UNLABELED_DIR}/x_valid.npy', allow_pickle=True)
+    #x_train_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    #x_test_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    #x_val_second = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
     
 
     # y_train_second = np.load('data/second 50/y_train.npy', allow_pickle=True)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     # y_val_second =  np.argmax(y_val_second, axis=-1)
     # y_test_second =  np.argmax(y_test_second, axis=-1)
 
-    x_all = np.concatenate((x_train_second, x_val_second), axis=0)
+    x_all_train = np.concatenate((x_train_second, x_val_second), axis=0)
     # y_all = np.concatenate((y_train_second, y_val_second), axis=0)
 
     print('Second X train shape: ', x_train_second.shape)
@@ -83,36 +83,38 @@ if __name__ == '__main__':
     gc.collect()
 
     #Swapping to channels first
-    x_all = np.moveaxis(x_all, 2, 1)
+    x_all_train = np.moveaxis(x_all_train, 2, 1)
 
     x_test_second = np.moveaxis(x_test_second, 2, 1)
     # x_val_second = np.moveaxis(x_val_second, 2, 1)
     # x_train_second = np.moveaxis(x_train_second, 2, 1)
-    print('X all shape: ', x_all.shape)
+    print('X all shape: ', x_all_train.shape)
     print('Second X test shape after move: ', x_test_second.shape)
     # print('Second X val shape after move: ', x_val_second.shape)
     # print('Second X train shape after move: ', x_train_second.shape)
 
     print('Reading (labeled) subjects 0-49...')
-    # x_train_first = np.load(f'data/{LABELED_DIR}/x_train.npy', allow_pickle=True)
-    # x_test_first = np.load(f'data/{LABELED_DIR}/x_test.npy', allow_pickle=True)
-    # x_val_first = np.load(f'data/{LABELED_DIR}/x_valid.npy', allow_pickle=True)
-    x_train_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
-    x_test_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
-    x_val_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    x_train_first = np.load(f'data/{LABELED_DIR}/x_train.npy', allow_pickle=True)
+    x_test_first = np.load(f'data/{LABELED_DIR}/x_test.npy', allow_pickle=True)
+    x_val_first = np.load(f'data/{LABELED_DIR}/x_valid.npy', allow_pickle=True)
+    #x_train_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    #x_test_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
+    #x_val_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
 
 
-    X_train_first = np.moveaxis(x_train_first, 2, 1)
-    X_val_first = np.moveaxis(x_val_first, 2, 1)
-    X_test_first = np.moveaxis(x_test_first, 2, 1)
+    x_train_first = np.moveaxis(x_train_first, 2, 1)
+    x_val_first = np.moveaxis(x_val_first, 2, 1)
+    x_test_first = np.moveaxis(x_test_first, 2, 1)
 
-    print('First X train shape: ', X_train_first.shape)
-    print('First X val shape: ', X_val_first.shape)
-    print('First X test shape: ', X_test_first.shape)
+    x_all_train = np.concatenate((x_all_train, x_train_first), axis=0)
+
+    print('First X train shape: ', x_train_first.shape)
+    print('First X val shape: ', x_val_first.shape)
+    print('First X test shape: ', x_test_first.shape)
 
     for key in chan_dic.keys():
         print("Channel: ", key)
-        isolated_channel_train = x_all[:,chan_dic[key],:]
+        isolated_channel_train = x_all_train[:,chan_dic[key],:]
         isolated_channel_val = x_test_second[:,chan_dic[key],:]
         
         print('Isolated channel train shape: ', isolated_channel_train.shape)
