@@ -13,7 +13,7 @@ channels = [
 ]
 
 paths = [
-    '_Twristar_CNN_train_features_sub_1to50.npy', '_Twristar_CNN_validation_features_sub_1to50.npy', '_Twristar_CNN_test_features_sub_1to50.npy'
+    '_train_features_sub_1to50.npy', '_validation_features_sub_1to50.npy', '_test_features_sub_1to50.npy'
 ]
 
 # chan_dic = {
@@ -25,7 +25,7 @@ paths = [
 # }
 
 # features = 'CNN'
-features = 'Twristar_CNN'
+features = '_train_on_all_CNN'
 UNLABELED_DIR = 'twristar/unlabeled'
 LABELED_DIR = 'twristar/labeled'
 
@@ -37,22 +37,22 @@ if __name__ == '__main__':
     
     ax = [ax1, ax2, ax3, ax4, ax5]
    
-    # for i, channel in enumerate(channels):
-    #     print('Loading ', channel)
-    #     f = np.load(f'{channel}_{features}_features_sub_50to100.npy', allow_pickle=True)
+    for i, channel in enumerate(channels):
+        print('Loading ', channel)
+        f = np.load(f'{channel}_{features}_features_sub_50to100.npy', allow_pickle=True)
 
-    #     print('Feature shape: ', f.shape)
+        print('Feature shape: ', f.shape)
 
-    #     reducer = umap.UMAP(n_neighbors=umap_neighbors, n_components=umap_dim)
-    #     embedding = reducer.fit_transform(f)
+        reducer = umap.UMAP(n_neighbors=umap_neighbors, n_components=umap_dim)
+        embedding = reducer.fit_transform(f)
 
-    #     ax[i].set_title(channel)
-    #     if umap_dim==2:
-    #         ax[i].scatter(embedding[:,0], embedding[:,1], c='maroon', marker='.')
-    #     else:
-    #         ax[i].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c='maroon')
+        ax[i].set_title(channel)
+        if umap_dim==2:
+            ax[i].scatter(embedding[:,0], embedding[:,1], c='maroon', marker='.')
+        else:
+            ax[i].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c='maroon')
 
-    # plt.savefig('features_umap_sub50-100.png')
+    plt.savefig('features_umap_sub50-100.png')
 
     if umap_dim == 3:
         fig, ax = plt.subplots(5, 3, sharey=False, subplot_kw=dict(projection="3d"))
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     for i, channel in enumerate(channels):
         for j, path in enumerate(paths):
             print(f'{i}:{j} {channel}, {path}')
-            f = np.load(channel+path, allow_pickle=True)
+            f = np.load(channel+features+path, allow_pickle=True)
             if 'train' in path:
                 y = np.load(f'data/{LABELED_DIR}/y_train.npy')
             elif 'valid' in path:

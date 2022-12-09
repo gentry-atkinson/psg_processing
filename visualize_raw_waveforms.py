@@ -5,33 +5,38 @@ import os
 from sklearn.model_selection import train_test_split
 
 #FOR PSG AUDIO
-# chan_dic = {
-#     'Thermistor Flow': [9],
-#     'Respiratory Belt' : [10, 11],
-#     'ECG' : [8],
-#     'EOG' : [3, 4],
-#     'EMG' : [5],
-#     'Leg' : [6, 7]
-# }
+chan_dic = {
+    'Thermistor Flow': [9],
+    'Respiratory Belt together' : [10, 11],
+    'Thorasis': [10],
+    'Abdominal': [11],
+    'ECG' : [8],
+    'EOG' : [3, 4],
+    'EMG' : [5],
+    'Leg' : [6, 7]
+} 
 
 #FOR TWRISTAR
-chan_dic = {
-    'X' : [0],
-    'Y' : [1],
-    'Z' : [2],
-    'X, Y, Z together' : [0, 1, 2],
-    'RMS' : [3]
-}
+# chan_dic = {
+#     'Accel' : [0],
+#     'BVP' : [1],
+#     'EDA' : [2],
+#     'P Temp' : [3],
+#     'All together' : [0, 1, 2, 3]
+# }
 
-UNLABELED_DIR = 'twristar/unlabeled'
-LABELED_DIR = 'twristar/labeled'
+# UNLABELED_DIR = 'twristar/unlabeled'
+# LABELED_DIR = 'twristar/labeled'
 
-color = ['maroon', 'darkblue', 'gold']
+UNLABELED_DIR = 'second 50'
+LABELED_DIR = 'first 50'
+
+color = ['maroon', 'darkblue', 'gold', 'green']
 
 if __name__ == '__main__':
 
     axes = []
-    fig, axes = plt.subplots(5, 1, sharey=False)
+    fig, axes = plt.subplots(len(chan_dic), 1, sharey=False)
 
     #data is channels last
 
@@ -60,8 +65,8 @@ if __name__ == '__main__':
     else:
         x_train_first, x_val_first = train_test_split(x_train_first, test_size=0.1, shuffle=False)
 
-    data = x_train_second
-    data_str = 'x_train_second'
+    data = x_train_first
+    data_str = 'x_train_first'
 
     instance_to_plot = random.randint(0, data.shape[0]-1)
     fig.suptitle(f'Instance: {instance_to_plot} of {data_str}')
@@ -76,7 +81,7 @@ if __name__ == '__main__':
 
     fig.tight_layout()
     #plt.show()
-    plt.savefig('visualize_raw_signals.pdf')
+    plt.savefig(f'raw psg visualizations/visualize_raw_{data_str}.pdf')
 
 
 

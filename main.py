@@ -5,27 +5,29 @@ import torch
 import os
 import gc
 
-EEG_A1_A2 = 0
-EEG_C3_A2 = 1
-EEG_C4_A1 = 2
-EOG_LEFT = 3
-EOG_RIGHT = 4
-EMG_CHIN = 5
-LEG_1 = 6
-LEG_2 = 7
-ECG = 8
-FLOW = 9
-THO = 10
-ABD = 11
+# EEG_A1_A2 = 0
+# EEG_C3_A2 = 1
+# EEG_C4_A1 = 2
+# EOG_LEFT = 3
+# EOG_RIGHT = 4
+# EMG_CHIN = 5
+# LEG_1 = 6
+# LEG_2 = 7
+# ECG = 8
+# FLOW = 9
+# THO = 10
+# ABD = 11
 
-# chan_dic = {
-#     'Thermistor Flow': [9],
-#     'Respiratory Belt' : [10, 11],
-#     'ECG' : [8],
-#     'EOG' : [3, 4],
-#     'EMG' : [5],
-#     'Leg' : [6, 7]
-# } 
+chan_dic = {
+    'Thermistor Flow': [9],
+    'Respiratory Belt together' : [10, 11],
+    'Thorasis': [10],
+    'Abdominal': [11],
+    'ECG' : [8],
+    'EOG' : [3, 4],
+    'EMG' : [5],
+    'Leg' : [6, 7]
+} 
 
 # chan_dic = {
 #     'Accel' : [0],
@@ -35,25 +37,25 @@ ABD = 11
 #     'All together' : [0, 1, 2, 3]
 # }
 
-chan_dic = {
-    'test' : [0]
-}
+# chan_dic = {
+#     'test' : [0]
+# }
 
-features = 'train_on_all_CNN'
+features = 'psg_CNN'
 
 NUM_CLASS = 2
 
-# UNLABELED_DIR = 'second 50'
-# LABELED_DIR = 'first 50'
-UNLABELED_DIR = 'twristar/unlabeled'
-LABELED_DIR = 'twristar/labeled'
+UNLABELED_DIR = 'second 50'
+LABELED_DIR = 'first 50'
+# UNLABELED_DIR = 'twristar/unlabeled'
+# LABELED_DIR = 'twristar/labeled'
 
 
 if __name__ == '__main__':
     if not os.path.exists('temp'):
         os.mkdir('temp')
-    if not os.path.exists('results'):
-        os.mkdir('results')
+    if not os.path.exists('model_snapshots'):
+        os.mkdir('model_snapshots')
 
     print('Reading (unlabeled) subjects 50-100...')
     x_train_second = np.load(f'data/{UNLABELED_DIR}/x_train.npy', allow_pickle=True)
