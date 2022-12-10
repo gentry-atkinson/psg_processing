@@ -8,12 +8,9 @@ from sklearn.model_selection import train_test_split
 chan_dic = {
     'Thermistor Flow': [9],
     'Respiratory Belt together' : [10, 11],
-    'Thorasis': [10],
-    'Abdominal': [11],
     'ECG' : [8],
     'EOG' : [3, 4],
     'EMG' : [5],
-    'Leg' : [6, 7]
 } 
 
 #FOR TWRISTAR
@@ -68,7 +65,9 @@ if __name__ == '__main__':
     data = x_train_first
     data_str = 'x_train_first'
 
-    instance_to_plot = random.randint(0, data.shape[0]-1)
+    #instance_to_plot = random.randint(0, data.shape[0]-1)
+    instance_to_plot = 1899
+
     fig.suptitle(f'Instance: {instance_to_plot} of {data_str}')
 
     for i, k in enumerate(chan_dic.keys()):
@@ -79,7 +78,7 @@ if __name__ == '__main__':
             axes[i].plot(range(data.shape[1]), data[instance_to_plot, :, c], c=color[j])
         #fig.title
 
-    fig.tight_layout()
+    fig.tight_layout(pad=0.5)
     #plt.show()
     plt.savefig(f'raw psg visualizations/visualize_raw_{data_str}.pdf')
 

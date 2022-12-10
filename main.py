@@ -20,8 +20,7 @@ import gc
 
 chan_dic = {
     'Thermistor Flow': [9],
-    'Respiratory Belt together' : [10, 11],
-    'Thorasis': [10],
+    'Thorasic': [10],
     'Abdominal': [11],
     'ECG' : [8],
     'EOG' : [3, 4],
