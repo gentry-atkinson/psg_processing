@@ -16,13 +16,15 @@ channels = [
 
 LABELED_DIR = 'twristar/labeled'
 
-features = '_train_on_all_CNN'
+features = 'twristar_train-extract_on_same_50_CNN_'
+
+K=3
 
 if __name__ == '__main__':
     for channel in channels:
-        x_train = np.load(f'{channel}{features}_train_features_sub_1to50.npy')
-        x_val = np.load(f'{channel}{features}_validation_features_sub_1to50.npy')
-        x_test = np.load(f'{channel}{features}_test_features_sub_1to50.npy')
+        x_train = np.load(f'{features}{channel}_train_features_sub_1to50.npy')
+        x_val = np.load(f'{features}{channel}_validation_features_sub_1to50.npy')
+        x_test = np.load(f'{features}{channel}_test_features_sub_1to50.npy')
 
         #y_train = np.load('data/first 50/y_train.npy')
         y_train = np.load(f'data/{LABELED_DIR}/y_train.npy')
@@ -44,7 +46,7 @@ if __name__ == '__main__':
         print('y val shape: ', y_val.shape)
         print('y test shape: ', y_test.shape)
 
-        neigh = KNeighborsClassifier(n_neighbors=3)
+        neigh = KNeighborsClassifier(n_neighbors=K)
         neigh.fit(x_train, y_train)
         y_pred = neigh.predict(x_test)
 

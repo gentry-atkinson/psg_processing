@@ -18,36 +18,36 @@ import gc
 # THO = 10
 # ABD = 11
 
-chan_dic = {
-    'Thermistor Flow': [9],
-    'Thorasic': [10],
-    'Abdominal': [11],
-    'ECG' : [8],
-    'EOG' : [3, 4],
-    'EMG' : [5],
-    'Leg' : [6, 7]
-} 
-
 # chan_dic = {
-#     'Accel' : [0],
-#     'BVP' : [1],
-#     'EDA' : [2],
-#     'P Temp' : [3],
-#     'All together' : [0, 1, 2, 3]
-# }
+#     'Thermistor Flow': [9],
+#     'Thorasic': [10],
+#     'Abdominal': [11],
+#     'ECG' : [8],
+#     'EOG' : [3, 4],
+#     'EMG' : [5],
+#     'Leg' : [6, 7]
+# } 
+
+chan_dic = {
+    'Accel' : [0],
+    'BVP' : [1],
+    'EDA' : [2],
+    'P Temp' : [3],
+    'All together' : [0, 1, 2, 3]
+}
 
 # chan_dic = {
 #     'test' : [0]
 # }
 
-features = 'psg_CNN'
+features = 'twristar_train-extract_on_same_50_CNN'
 
 NUM_CLASS = 2
 
-UNLABELED_DIR = 'second 50'
-LABELED_DIR = 'first 50'
-# UNLABELED_DIR = 'twristar/unlabeled'
-# LABELED_DIR = 'twristar/labeled'
+# UNLABELED_DIR = 'second 50'
+# LABELED_DIR = 'first 50'
+UNLABELED_DIR = 'twristar/unlabeled'
+LABELED_DIR = 'twristar/labeled'
 
 
 if __name__ == '__main__':
@@ -102,6 +102,14 @@ if __name__ == '__main__':
     #x_test_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
     #x_val_first = np.concatenate((np.zeros((500, 150, 1)), np.ones((300, 150, 1))), axis=0)
 
+    y_train_first = np.load(f'data/{LABELED_DIR}/y_train.npy', allow_pickle=True)
+    y_test_first = np.load(f'data/{LABELED_DIR}/y_test.npy', allow_pickle=True)
+    y_val_first = np.load(f'data/{LABELED_DIR}/y_valid.npy', allow_pickle=True)
+
+    y_train_first = np.argmax(y_train_first, axis=-1)
+    y_val_first =  np.argmax(y_val_first, axis=-1)
+    y_test_first =  np.argmax(y_test_first, axis=-1)
+
 
     x_train_first = np.moveaxis(x_train_first, 2, 1)
     x_val_first = np.moveaxis(x_val_first, 2, 1)
@@ -115,8 +123,8 @@ if __name__ == '__main__':
 
     for key in chan_dic.keys():
         print("Channel: ", key)
-        isolated_channel_train = x_all_train[:,chan_dic[key],:]
-        isolated_channel_val = x_test_second[:,chan_dic[key],:]
+        isolated_channel_train = x_train_first[:,chan_dic[key],:]
+        isolated_channel_val = x_val_first[:,chan_dic[key],:]
         
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
@@ -124,15 +132,16 @@ if __name__ == '__main__':
         
         #feature_learner = NNCLR_C(X=isolated_channel_train, y=y_train_second)
         #The y values are used to determine the number of classes
-        feature_learner = NNCLR_C(X=isolated_channel_train, y=[1])
-        feature_learner.fit(
-            isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
-            isolated_channel_val, np.ones(isolated_channel_val.shape[0])
-        )
+        #feature_learner = NNCLR_C(X=isolated_channel_train, y=[1])
+        feature_learner = NNCLR_C(X=isolated_channel_train, y=y_train_first)
         # feature_learner.fit(
-        #     isolated_channel_train, y_all,
-        #     isolated_channel_val, y_test_second
+        #     isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
+        #     isolated_channel_val, np.ones(isolated_channel_val.shape[0])
         # )
+        feature_learner.fit(
+            isolated_channel_train, y_train_first,
+            isolated_channel_val, y_val_first
+        )
 
         torch.save(feature_learner.model.state_dict(), f'{key}_{features}_feature_learner_weights.pt')
         
@@ -140,20 +149,20 @@ if __name__ == '__main__':
         f1 = feature_learner.get_features(isolated_channel_val)
         f = np.concatenate((f0, f1), axis=0)
         print("Feature shape: ", f.shape)
-        np.save(f'{key}_{features}_features_sub_50to100.npy', f)
+        np.save(f'{features}_{key}_features_sub_50to100.npy', f)
 
         #write a feature set for part of the first-50 set
         f = feature_learner.get_features(x_train_first[:,chan_dic[key],:])
         print("Train Feature shape: ", f.shape)
-        np.save(f'{key}_{features}_train_features_sub_1to50.npy', f)
+        np.save(f'{features}_{key}_train_features_sub_1to50.npy', f)
 
         f = feature_learner.get_features(x_val_first[:,chan_dic[key],:])
         print("Validation Feature shape: ", f.shape)
-        np.save(f'{key}_{features}_validation_features_sub_1to50.npy', f)
+        np.save(f'{features}_{key}_validation_features_sub_1to50.npy', f)
 
         f = feature_learner.get_features(x_test_first[:,chan_dic[key],:])
         print("Test Feature shape: ", f.shape)
-        np.save(f'{key}_{features}_test_features_sub_1to50.npy', f)
+        np.save(f'{features}_{key}_test_features_sub_1to50.npy', f)
 
     print("Fin")
         

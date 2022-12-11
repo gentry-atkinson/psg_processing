@@ -24,8 +24,8 @@ paths = [
 #     'All together' : [0, 1, 2, 3]
 # }
 
-# features = 'CNN'
-features = '_train_on_all_CNN'
+features = 'twristar_train-extract_on_same_50_CNN'
+
 UNLABELED_DIR = 'twristar/unlabeled'
 LABELED_DIR = 'twristar/labeled'
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
    
     for i, channel in enumerate(channels):
         print('Loading ', channel)
-        f = np.load(f'{channel}_{features}_features_sub_50to100.npy', allow_pickle=True)
+        f = np.load(f'{features}_{channel}_features_sub_50to100.npy', allow_pickle=True)
 
         print('Feature shape: ', f.shape)
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         else:
             ax[i].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c='maroon')
 
-    plt.savefig('features_umap_sub50-100.png')
+    plt.savefig(f'{features}_features_umap_sub50-100.png')
 
     if umap_dim == 3:
         fig, ax = plt.subplots(5, 3, sharey=False, subplot_kw=dict(projection="3d"))
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     for i, channel in enumerate(channels):
         for j, path in enumerate(paths):
             print(f'{i}:{j} {channel}, {path}')
-            f = np.load(channel+features+path, allow_pickle=True)
+            f = np.load(features+'_'+channel+path, allow_pickle=True)
             if 'train' in path:
                 y = np.load(f'data/{LABELED_DIR}/y_train.npy')
             elif 'valid' in path:
@@ -87,6 +87,6 @@ if __name__ == '__main__':
             else:
                 ax[i][j].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=y)
 
-    plt.savefig('features_umap_sub0-50.png')
+    plt.savefig(f'{features}_features_umap_sub0-50.png')
 
 

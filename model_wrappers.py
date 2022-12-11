@@ -37,12 +37,12 @@ import pandas as pd
 
 EMBEDDING_WIDTH = 64 #length of feature vector
 SLIDING_WINDIW = 128 #auto-assigned later, this is just a start value
-LR = 0.001
+LR = 0.0005
 WEIGHT_DECAY = 1e-5
 NN_MEM = 1024 #size in megabytes
 CL_EPOCHS = 120
 NUM_WORKERS = 16
-BATCH_SIZE = 20
+BATCH_SIZE = 16
 
 LOG = _logger('temp/train_log.txt')
 
