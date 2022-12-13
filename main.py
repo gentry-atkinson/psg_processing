@@ -40,7 +40,7 @@ chan_dic = {
 #     'test' : [0]
 # }
 
-features = 'twristar_train-extract_on_same_50_CNN'
+features = 'twristar_train_unlabeld_extract_labeled_CNN'
 
 NUM_CLASS = 2
 
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     x_val_first = np.moveaxis(x_val_first, 2, 1)
     x_test_first = np.moveaxis(x_test_first, 2, 1)
 
-    x_all_train = np.concatenate((x_all_train, x_train_first), axis=0)
+    x_combined_train = np.concatenate((x_all_train, x_train_first), axis=0)
 
     print('First X train shape: ', x_train_first.shape)
     print('First X val shape: ', x_val_first.shape)
@@ -123,8 +123,8 @@ if __name__ == '__main__':
 
     for key in chan_dic.keys():
         print("Channel: ", key)
-        isolated_channel_train = x_train_first[:,chan_dic[key],:]
-        isolated_channel_val = x_val_first[:,chan_dic[key],:]
+        isolated_channel_train = x_combined_train[:,chan_dic[key],:]
+        isolated_channel_val = x_test_second[:,chan_dic[key],:]
         
         print('Isolated channel train shape: ', isolated_channel_train.shape)
         print('Isolated channel validation shape: ', isolated_channel_val.shape)
@@ -133,17 +133,17 @@ if __name__ == '__main__':
         #feature_learner = NNCLR_C(X=isolated_channel_train, y=y_train_second)
         #The y values are used to determine the number of classes
         #feature_learner = NNCLR_C(X=isolated_channel_train, y=[1])
-        feature_learner = NNCLR_C(X=isolated_channel_train, y=y_train_first)
-        # feature_learner.fit(
-        #     isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
-        #     isolated_channel_val, np.ones(isolated_channel_val.shape[0])
-        # )
+        feature_learner = NNCLR_C(X=isolated_channel_train, y=[5])
         feature_learner.fit(
-            isolated_channel_train, y_train_first,
-            isolated_channel_val, y_val_first
+            isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
+            isolated_channel_val, np.ones(isolated_channel_val.shape[0])
         )
+        # feature_learner.fit(
+        #     isolated_channel_train, y_train_first,
+        #     isolated_channel_val, y_val_first
+        # )
 
-        torch.save(feature_learner.model.state_dict(), f'{key}_{features}_feature_learner_weights.pt')
+        torch.save(feature_learner.model.state_dict(), f'{features}_{key}_feature_learner_weights.pt')
         
         f0 = feature_learner.get_features(isolated_channel_train)
         f1 = feature_learner.get_features(isolated_channel_val)

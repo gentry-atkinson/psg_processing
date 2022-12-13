@@ -12,6 +12,7 @@ channels = [
     'Accel','BVP','EDA', 'P Temp', 'All together'
 ]
 
+
 paths = [
     '_train_features_sub_1to50.npy', '_validation_features_sub_1to50.npy', '_test_features_sub_1to50.npy'
 ]
@@ -24,7 +25,7 @@ paths = [
 #     'All together' : [0, 1, 2, 3]
 # }
 
-features = 'twristar_train-extract_on_same_50_CNN'
+features = 'twristar_train_unlabeld_extract_labeled_CNN'
 
 UNLABELED_DIR = 'twristar/unlabeled'
 LABELED_DIR = 'twristar/labeled'

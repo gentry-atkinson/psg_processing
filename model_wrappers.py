@@ -397,8 +397,8 @@ class NNCLR(nn.Module):
         Train cycle with validation
         Runs through max number of epochs and then reloads best snapshot
         """
-        X_train, y_train = shuffle(X_train, y_train, random_state=1899)
-        X_val, y_val = shuffle(X_val, y_val, random_state=1899)
+        # X_train, y_train = shuffle(X_train, y_train, random_state=1899)
+        # X_val, y_val = shuffle(X_val, y_val, random_state=1899)
         train_dataloader = setup_dataloader(X_train, y_train, self.args, shuffle=False)
 
         val_dataloader = setup_dataloader(X_val, y_val, self.args, shuffle=False)
