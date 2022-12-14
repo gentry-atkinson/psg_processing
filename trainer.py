@@ -22,7 +22,7 @@ import seaborn as sns
 import fitlog
 from copy import deepcopy
 
-SKIP_EPOCHS = 5 #Don't save a best model from first 5 epochs
+SKIP_EPOCHS = 3 #Don't save a best model from first 5 epochs
 
 recon = None
 nn_replacer = None

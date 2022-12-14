@@ -8,6 +8,7 @@
 *.xlsx
 
 temp/*
+UniMiB-SHAR/*
 
 README.txt
 log*
