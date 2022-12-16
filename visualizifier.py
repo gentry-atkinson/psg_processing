@@ -3,14 +3,8 @@ import umap.umap_ as umap
 from matplotlib import pyplot as plt
 
 umap_neighbors = 15
-umap_dim = 3
+umap_dim = 2
 
-# channels = [
-#     'Thermistor','Respiratory Belt','ECG'
-# ]
-channels = [
-    'Accel','BVP','EDA', 'P Temp', 'All together'
-]
 
 
 paths = [
@@ -25,42 +19,61 @@ paths = [
 #     'All together' : [0, 1, 2, 3]
 # }
 
-features = 'twristar_train_unlabeld_extract_labeled_CNN'
+chan_dic = {
+    'Thermistor Flow': [9],
+    'Thorasic': [10],
+    'Abdominal': [11],
+    'ECG' : [8],
+    'EOG' : [3, 4],
+    'EMG' : [5],
+    'Leg' : [6, 7]
+} 
 
-UNLABELED_DIR = 'twristar/unlabeled'
-LABELED_DIR = 'twristar/labeled'
+features = 'psg_train_all_extract_labeled_CNN'
+
+color = ['maroon', 'darkblue', 'gold', 'green']
+
+# UNLABELED_DIR = 'twristar/unlabeled'
+# LABELED_DIR = 'twristar/labeled'
+UNLABELED_DIR = 'second 50'
+LABELED_DIR = 'first 50'
+
+MARKER_SIZE = 1
 
 if __name__ == '__main__':
-    if umap_dim == 3:
-        fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, sharey=False, subplot_kw=dict(projection="3d"))
-    elif umap_dim == 2:
-        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, sharey=False)
+    # if umap_dim == 3:
+    #     fig, ax = plt.subplots(1, len(chan_dic.keys()), sharey=False, subplot_kw=dict(projection="3d"), figsize=(3*len(chan_dic.keys()), 3))
+    # elif umap_dim == 2:
+    #     fig, ax = plt.subplots(1, len(chan_dic.keys()), sharey=False, figsize=(3*len(chan_dic.keys()), 3))
     
-    ax = [ax1, ax2, ax3, ax4, ax5]
+    # #ax = [ax1, ax2, ax3, ax4, ax5]
    
-    for i, channel in enumerate(channels):
-        print('Loading ', channel)
-        f = np.load(f'{features}_{channel}_features_sub_50to100.npy', allow_pickle=True)
+    # for i, channel in enumerate(chan_dic.keys()):
+    #     print('Loading ', channel)
+    #     f = np.load(f'{features}_{channel}_features_sub_50to100.npy', allow_pickle=True)
 
-        print('Feature shape: ', f.shape)
+    #     print('Feature shape: ', f.shape)
 
-        reducer = umap.UMAP(n_neighbors=umap_neighbors, n_components=umap_dim)
-        embedding = reducer.fit_transform(f)
+    #     reducer = umap.UMAP(n_neighbors=umap_neighbors, n_components=umap_dim)
+    #     embedding = reducer.fit_transform(f)
 
-        ax[i].set_title(channel)
-        if umap_dim==2:
-            ax[i].scatter(embedding[:,0], embedding[:,1], c='maroon', marker='.')
-        else:
-            ax[i].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c='maroon')
+    #     ax[i].set_title(channel)
+    #     if umap_dim==2:
+    #         ax[i].scatter(embedding[:,0], embedding[:,1], c='maroon', marker='.', s=MARKER_SIZE)
+    #     else:
+    #         ax[i].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', s=MARKER_SIZE, c='maroon')
+    #     ax[i].set_xticks([])
+    #     ax[i].set_yticks([])
 
-    plt.savefig(f'{features}_features_umap_sub50-100.png')
+    # fig.tight_layout(pad=0.5)
+    # plt.savefig(f'{features}_features_umap_sub50-100.png')
 
     if umap_dim == 3:
-        fig, ax = plt.subplots(5, 3, sharey=False, subplot_kw=dict(projection="3d"))
+        fig, ax = plt.subplots(len(chan_dic.keys()), 3, sharey=False, subplot_kw=dict(projection="3d"), figsize=(6, 3*len(chan_dic.keys())))
     elif umap_dim == 2:
-        fig, ax = plt.subplots(3, 3, sharey=False)
+        fig, ax = plt.subplots(len(chan_dic.keys()), 3, sharey=False, figsize=(6, 3*len(chan_dic.keys())))
 
-    for i, channel in enumerate(channels):
+    for i, channel in enumerate(chan_dic.keys()):
         for j, path in enumerate(paths):
             print(f'{i}:{j} {channel}, {path}')
             f = np.load(features+'_'+channel+path, allow_pickle=True)
@@ -84,10 +97,13 @@ if __name__ == '__main__':
 
             ax[i][j].set_title(channel)
             if umap_dim==2:
-                ax[i][j].scatter(embedding[:,0], embedding[:,1], c=y, marker='.')
+                ax[i][j].scatter(embedding[:,0], embedding[:,1], c=[color[i] for i in y], marker='.',s=MARKER_SIZE)
             else:
-                ax[i][j].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=y)
+                ax[i][j].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=[color[i] for i in y], s=MARKER_SIZE)
+            ax[i][j].set_xticks([])
+            ax[i][j].set_yticks([])
 
+    fig.tight_layout(pad=0.5)
     plt.savefig(f'{features}_features_umap_sub0-50.png')
 
 

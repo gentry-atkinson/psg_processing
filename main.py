@@ -18,36 +18,36 @@ import gc
 # THO = 10
 # ABD = 11
 
-# chan_dic = {
-#     'Thermistor Flow': [9],
-#     'Thorasic': [10],
-#     'Abdominal': [11],
-#     'ECG' : [8],
-#     'EOG' : [3, 4],
-#     'EMG' : [5],
-#     'Leg' : [6, 7]
-# } 
-
 chan_dic = {
-    'Accel' : [0],
-    'BVP' : [1],
-    'EDA' : [2],
-    'P Temp' : [3],
-    'All together' : [0, 1, 2, 3]
-}
+    'Thermistor Flow': [9],
+    'Thorasic': [10],
+    'Abdominal': [11],
+    'ECG' : [8],
+    'EOG' : [3, 4],
+    'EMG' : [5],
+    'Leg' : [6, 7]
+} 
+
+# chan_dic = {
+#     'Accel' : [0],
+#     'BVP' : [1],
+#     'EDA' : [2],
+#     'P Temp' : [3],
+#     'All together' : [0, 1, 2, 3]
+# }
 
 # chan_dic = {
 #     'test' : [0]
 # }
 
-features = 'twristar_train_unlabeld_extract_labeled_CNN'
+features = 'psg_train_all_extract_labeled_CNN'
 
 NUM_CLASS = 2
 
-# UNLABELED_DIR = 'second 50'
-# LABELED_DIR = 'first 50'
-UNLABELED_DIR = 'twristar/unlabeled'
-LABELED_DIR = 'twristar/labeled'
+UNLABELED_DIR = 'second 50'
+LABELED_DIR = 'first 50'
+# UNLABELED_DIR = 'twristar/unlabeled'
+# LABELED_DIR = 'twristar/labeled'
 
 
 if __name__ == '__main__':
@@ -133,7 +133,7 @@ if __name__ == '__main__':
         #feature_learner = NNCLR_C(X=isolated_channel_train, y=y_train_second)
         #The y values are used to determine the number of classes
         #feature_learner = NNCLR_C(X=isolated_channel_train, y=[1])
-        feature_learner = NNCLR_C(X=isolated_channel_train, y=[5])
+        feature_learner = NNCLR_C(X=isolated_channel_train, y=[1])
         feature_learner.fit(
             isolated_channel_train, np.ones(isolated_channel_train.shape[0]),
             isolated_channel_val, np.ones(isolated_channel_val.shape[0])
@@ -145,9 +145,9 @@ if __name__ == '__main__':
 
         torch.save(feature_learner.model.state_dict(), f'{features}_{key}_feature_learner_weights.pt')
         
-        f0 = feature_learner.get_features(isolated_channel_train)
-        f1 = feature_learner.get_features(isolated_channel_val)
-        f = np.concatenate((f0, f1), axis=0)
+        #f0 = feature_learner.get_features(isolated_channel_train)
+        f = feature_learner.get_features(isolated_channel_val)
+        #f = np.concatenate((f0, f1), axis=0)
         print("Feature shape: ", f.shape)
         np.save(f'{features}_{key}_features_sub_50to100.npy', f)
 
