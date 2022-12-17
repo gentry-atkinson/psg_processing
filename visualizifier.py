@@ -68,12 +68,13 @@ if __name__ == '__main__':
     # fig.tight_layout(pad=0.5)
     # plt.savefig(f'{features}_features_umap_sub50-100.png')
 
-    if umap_dim == 3:
-        fig, ax = plt.subplots(len(chan_dic.keys()), 3, sharey=False, subplot_kw=dict(projection="3d"), figsize=(6, 3*len(chan_dic.keys())))
-    elif umap_dim == 2:
-        fig, ax = plt.subplots(len(chan_dic.keys()), 3, sharey=False, figsize=(6, 3*len(chan_dic.keys())))
+    # if umap_dim == 3:
+    #     fig, ax = plt.subplots(len(chan_dic.keys()), 3, sharey=False, subplot_kw=dict(projection="3d"), figsize=(6, 3*len(chan_dic.keys())))
+    # elif umap_dim == 2:
+    #     fig, ax = plt.subplots(len(chan_dic.keys()), 3, sharey=False, figsize=(6, 3*len(chan_dic.keys())))
 
     for i, channel in enumerate(chan_dic.keys()):
+        fig, ax = plt.subplots(1, len(paths), sharey=False, figsize=(3*len(paths), 3))
         for j, path in enumerate(paths):
             print(f'{i}:{j} {channel}, {path}')
             f = np.load(features+'_'+channel+path, allow_pickle=True)
@@ -94,16 +95,24 @@ if __name__ == '__main__':
 
             reducer = umap.UMAP(n_neighbors=umap_neighbors, n_components=umap_dim)
             embedding = reducer.fit_transform(f)
-
-            ax[i][j].set_title(channel)
+            if 'train' in path:    
+                ax[j].set_title('Train')
+            elif 'validation' in path:    
+                ax[j].set_title('Validation')
+            elif 'test' in path:    
+                ax[j].set_title('Test')
+            else:
+                print('Unknown set type.')
             if umap_dim==2:
-                ax[i][j].scatter(embedding[:,0], embedding[:,1], c=[color[i] for i in y], marker='.',s=MARKER_SIZE)
+                ax[j].scatter(embedding[:,0], embedding[:,1], c=[color[i] for i in y], marker='.',s=MARKER_SIZE)
             else:
                 ax[i][j].scatter(embedding[:,0], embedding[:,1], embedding[:,2], marker='.', c=[color[i] for i in y], s=MARKER_SIZE)
-            ax[i][j].set_xticks([])
-            ax[i][j].set_yticks([])
+            ax[j].set_xticks([])
+            ax[j].set_yticks([])
+        fig.tight_layout(pad=0.5)
+        plt.savefig(f'imgs/{features}_{channel}_features_umap_sub0-50.png')
 
-    fig.tight_layout(pad=0.5)
-    plt.savefig(f'{features}_features_umap_sub0-50.png')
+    # fig.tight_layout(pad=0.5)
+    # plt.savefig(f'{features}_features_umap_sub0-50.png')
 
 
